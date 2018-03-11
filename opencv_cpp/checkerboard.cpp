@@ -36,10 +36,11 @@ int main(int argc, char *argv[])
             rectangle(base_img, top_left, bottom_right, white, CV_FILLED, 8, 0);
         }
     }
-
-    namedWindow("BASE DISPLAY", WINDOW_AUTOSIZE);
-    imshow("BASE DISPLAY", base_img);
-    waitKey(0);
+    
+    std::vector<int> compression_params;
+    compression_params.push_back(CV_IMWRITE_JPEG_QUALITY);
+    compression_params.push_back(96);
+    imwrite("board.jpg", base_img, compression_params);
 
     return 0;
 }
