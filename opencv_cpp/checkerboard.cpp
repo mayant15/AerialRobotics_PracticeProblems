@@ -3,22 +3,19 @@
 #include <iostream>
 #include <string>
 
-using namespace std;
-using namespace cv;
-
 int main(int argc, char *argv[])
 {
     // check if proper arguments are given
     if(argc != 4){
-        cout << "Usage: checkerboard <width> <height> <side_length_of_square>" << endl;
+        std::cout << "Usage: checkerboard <width> <height> <side_length_of_small_block>" << std::endl;
         return -1;
     }
 
     int img_width = std::atoi(argv[1]);
     int img_height = std::atoi(argv[2]);
     int block_size = std::atoi(argv[3]);
-    Mat base_img(img_height, img_width, CV_8UC4);
-    Scalar white(255, 255, 255, 0.9);
+    cv::Mat base_img(img_height, img_width, CV_8UC4);
+    cv::Scalar white(255, 255, 255, 0.9);
 
     // loop over the mat
     for (int i = 0; i < img_height; i += block_size) {
@@ -31,16 +28,13 @@ int main(int argc, char *argv[])
         }
 
         for (; j < img_width; j += 2 * block_size) {
-            Point top_left(j, i);
-            Point bottom_right(j + block_size, i + block_size);
+            cv::Point top_left(j, i);
+            cv::Point bottom_right(j + block_size, i + block_size);
             rectangle(base_img, top_left, bottom_right, white, CV_FILLED, 8, 0);
         }
     }
     
-    std::vector<int> compression_params;
-    compression_params.push_back(CV_IMWRITE_JPEG_QUALITY);
-    compression_params.push_back(96);
-    imwrite("board.jpg", base_img, compression_params);
+    cv::imwrite("board.jpg", base_img);
 
     return 0;
 }
