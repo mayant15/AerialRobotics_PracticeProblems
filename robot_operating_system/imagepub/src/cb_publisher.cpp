@@ -25,36 +25,25 @@ void rectangle(sensor_msgs::Image& img_msg, Point top_left, Point bottom_right, 
 int main(int argc, char *argv[])
 {
     // Validate input
-    if (!(argc == 1 || argc == 5)) {
+    if (argc < 1 || argc > 5) {
         std::cout << "Invalid Arguments" << std::endl;
-        std::cout << "Usage: cb_publisher <height> <width> <square_size> <frequency>" << std::endl;
+        std::cout << "Usage: cb_publisher _<param_name>:=<param_value>" << std::endl;
+        std::cout << "Parameters: height, width, square_size, frequency" << std::endl;
         return -1;
     }
 
     ros::init(argc, argv, "cb_publisher");
-    ros::NodeHandle nh;
+    ros::NodeHandle nh("~");
 
     image_transport::ImageTransport it(nh);
     image_transport::Publisher pub = it.advertise("cb_image", 1);
 
     int height, width, square_size, freq;
 
-    if (argc == 1) {
-        height = DEFAULT_HEIGHT;
-        width = DEFAULT_WIDTH;
-        square_size = DEFAULT_SQAURE_SIZE;
-        freq = DEFAULT_FREQ;
-    } else {
-        height = std::atoi(argv[1]);
-        width = std::atoi(argv[2]);
-        square_size = std::atoi(argv[3]);
-        freq = std::atoi(argv[4]);
-    }
-
-    nh.setParam("height", height);
-    nh.setParam("width", width);
-    nh.setParam("square_size", square_size);
-    nh.setParam("frequency", freq);
+    nh.param<int>("width", width, DEFAULT_WIDTH);
+    nh.param<int>("height", height, DEFAULT_HEIGHT);
+    nh.param<int>("square_size", square_size, DEFAULT_SQAURE_SIZE);
+    nh.param<int>("frequency", freq, DEFAULT_FREQ);
 
     // Create the image message
     sensor_msgs::Image msg;
